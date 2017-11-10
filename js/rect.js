@@ -18,4 +18,20 @@ export class Rect {
   get bottomEdge() {
     return this.position.y + this.size.y / 2;
   }
+
+  get leftLine() {
+    return {position1: new Vector(this.leftEdge, this.topEdge), position2: new Vector(this.leftEdge, this.bottomEdge)}
+  }
+
+  get topLine() {
+    return {position1: new Vector(this.leftEdge, this.topEdge), position2: new Vector(this.rightEdge, this.topEdge)}
+  }
+
+  get rightLine() {
+    return {position1: new Vector(this.rightEdge, this.topEdge), position2: new Vector(this.rightEdge, this.bottomEdge)}
+  }
+
+  get bottomLine() {
+    return {position1: new Vector(this.rightEdge, this.bottomEdge), position2: new Vector(this.leftEdge, this.bottomEdge)}
+  }
 }
