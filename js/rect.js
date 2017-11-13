@@ -1,9 +1,10 @@
 import { Vector } from './vector.js';
 
 export class Rect {
-  constructor(width = 0, height = 0) {
+  constructor(width = 0, height = 0, type = 'block') {
     this.position = new Vector();
     this.size = new Vector(width, height);
+    this.type = type;
   }
 
   get leftEdge() {

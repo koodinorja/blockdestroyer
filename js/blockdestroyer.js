@@ -153,8 +153,20 @@ class BlockDestroyer {
 
     if (collide) {
       ball.position = lastPosition;
-      if (rect.isBlock) {
-        rect.alive = false;
+
+      switch (rect.type) {
+        case 'player':
+          let diff = Math.abs(rect.position.x - ball.position.x) / (rect.size.x / 2);
+          if (rect.position.x - ball.position.x > 0) {
+            ball.velocity.x += -(200 * diff);
+          } else {
+            ball.velocity.x += (200 * diff);
+          }
+
+          break;
+        case 'block':
+          rect.alive = false;
+          break;
       }
     }
   }
