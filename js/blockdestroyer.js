@@ -22,7 +22,7 @@ class BlockDestroyer {
       for (let x = 0; x < 10; x++) {
         let block = new Block();
         block.position.x = 60 + (x * block.size.x);
-        block.position.y = 20 + (y * block.size.y);
+        block.position.y = 80 + (y * block.size.y);
         block.color = `hsl(${Math.floor(((y + 1) / 8) * 350)}, 90%, 55%)`;
         this.blocks.push(block)
       }
@@ -63,11 +63,25 @@ class BlockDestroyer {
     this.ball.velocity = new Vector();
     this.ball.position.x = this.canvas.width / 2;
     this.ball.position.y = this.canvas.height / 2;
+    this.player.lives -= 1;
+  }
+
+  drawHeader() {
+    this.context.fillStyle = 'rgba(255, 255, 255, 1)';
+    this.context.fillRect(0, 40, this.canvas.width, 3);
+
+    this.context.font = '32px sans-serif';
+    this.context.fillText(`SCORE: ${this.player.score}`, 20, 30);
+
+    this.context.font = '32px sans-serif';
+    this.context.fillText(`LIVES: ${this.player.lives}`, this.canvas.width - 150, 30);
   }
 
   draw() {
     this.context.fillStyle = 'rgba(0, 0, 0, 1)';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.drawHeader();
 
     this.context.fillStyle = 'rgba(241, 241, 241, 1)';
     this.context.fillRect(this.player.leftEdge, this.player.topEdge, this.player.size.x, this.player.size.y);
@@ -98,8 +112,7 @@ class BlockDestroyer {
       this.ball.velocity.y = -this.ball.velocity.y;
     } else if (this.ball.bottomEdge > this.canvas.height) {
       // colliding with bottom. ded
-      this.ball.velocity.y = -this.ball.velocity.y;
-      // this.playerDie();
+      this.playerDie();
     }
 
     // player collide
@@ -166,6 +179,7 @@ class BlockDestroyer {
           break;
         case 'block':
           rect.alive = false;
+          this.player.score += 1;
           break;
       }
     }
