@@ -108,7 +108,7 @@ class BlockDestroyer {
     // ball wall collision
     if (this.ball.rightEdge > this.canvas.width || this.ball.leftEdge < 0) {
       this.ball.velocity.x = -this.ball.velocity.x;
-    } else if (this.ball.topEdge < 0) {
+    } else if (this.ball.topEdge < 50) {
       this.ball.velocity.y = -this.ball.velocity.y;
     } else if (this.ball.bottomEdge > this.canvas.height) {
       // colliding with bottom. ded
