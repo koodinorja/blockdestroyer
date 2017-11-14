@@ -74,21 +74,10 @@ class BlockDestroyer {
     this.context.fillText(`SCORE: ${this.player.score}`, 20, 30);
 
     this.context.font = '32px sans-serif';
-    this.context.fillText(`LIVES: ${this.player.lives}`, this.canvas.width - 150, 30);
+    this.context.fillText(`LIVES: ${this.player.lives > 0 ? this.player.lives : 0}`, this.canvas.width - 150, 30);
   }
 
-  draw() {
-    this.context.fillStyle = 'rgba(0, 0, 0, 1)';
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    this.drawHeader();
-
-    this.context.fillStyle = 'rgba(241, 241, 241, 1)';
-    this.context.fillRect(this.player.leftEdge, this.player.topEdge, this.player.size.x, this.player.size.y);
-
-    this.context.fillStyle = 'rgba(241, 241, 241, 1)';
-    this.context.fillRect(this.ball.leftEdge, this.ball.topEdge, this.ball.size.x, this.ball.size.x);
-
+  drawBlocks() {
     this.blocks.map(block => {
       if (block.alive) {
         this.context.strokeStyle = 'rgba(0, 0, 0, 1)';
@@ -98,6 +87,39 @@ class BlockDestroyer {
         this.context.fillRect(block.leftEdge, block.topEdge, block.size.x, block.size.y);
       }
     })
+  }
+
+  drawPlayer() {
+    this.context.fillStyle = 'rgba(241, 241, 241, 1)';
+    this.context.fillRect(this.player.leftEdge, this.player.topEdge, this.player.size.x, this.player.size.y);
+  }
+
+  drawBall() {
+    this.context.fillStyle = 'rgba(241, 241, 241, 1)';
+    this.context.fillRect(this.ball.leftEdge, this.ball.topEdge, this.ball.size.x, this.ball.size.x);
+  }
+
+  drawLose() {
+    this.context.font = '32px sans-serif';
+    this.context.fillText('GAME OVER!', 300, this.canvas.height / 2);
+    this.context.fillText('NO MORE LIVES!', 270, (this.canvas.height / 2) + 40);
+  }
+
+  draw() {
+    this.context.fillStyle = 'rgba(0, 0, 0, 1)';
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.drawHeader();
+
+    if (this.player.lives >= 0) {
+      this.drawBall();
+      this.drawBlocks();
+      this.drawPlayer();
+    }
+
+    if (this.player.lives < 0) {
+      this.drawLose();
+    }
   }
 
   simulate(dt) {
