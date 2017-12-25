@@ -13,6 +13,8 @@ class BlockDestroyer {
     this.accumulator = 0;
     this.step = 1 / 60;
 
+    this.audioContext = new AudioContext();
+
     this.ball = new Ball(10, 10);
 
     this.player = new Player();
@@ -64,6 +66,8 @@ class BlockDestroyer {
     this.ball.position.x = this.canvas.width / 2;
     this.ball.position.y = this.canvas.height / 2;
     this.player.lives -= 1;
+
+    this.playSound(80, 500);
   }
 
   drawHeader() {
@@ -130,11 +134,14 @@ class BlockDestroyer {
     // ball wall collision
     if (this.ball.rightEdge > this.canvas.width || this.ball.leftEdge < 0) {
       this.ball.velocity.x = -this.ball.velocity.x;
+      return;
     } else if (this.ball.topEdge < 50) {
       this.ball.velocity.y = -this.ball.velocity.y;
+      return;
     } else if (this.ball.bottomEdge > this.canvas.height) {
       // colliding with bottom. ded
       this.playerDie();
+      return;
     }
 
     // player collide
@@ -197,14 +204,27 @@ class BlockDestroyer {
           } else {
             ball.velocity.x += (200 * diff);
           }
-
+         this.playSound(440, 100);
           break;
         case 'block':
           rect.alive = false;
           this.player.score += 1;
+          this.playSound(300, 100);
           break;
       }
     }
+  }
+
+  playSound(frequency = 440, timeout = 100) {
+    let oscillator = this.audioContext.createOscillator();
+    oscillator.type = 'triangle';
+    oscillator.frequency.value = frequency;
+    oscillator.connect(this.audioContext.destination);
+    oscillator.start();
+
+    setTimeout(() => {
+      oscillator.stop();
+    }, timeout);
   }
 }
 
